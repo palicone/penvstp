@@ -1,7 +1,20 @@
 from penvstp.model_types import StepContext
 from penvstp.helpers import is_https_resource_available
 import os
-import urllib
+import urllib.request
+
+
+class DownloadDotProgress:
+  def __init__(self):
+    self.n_last_percent = 0
+
+  def __call__(self, n_blocks, n_block_size, n_total_size):
+    n_downloaded = n_blocks * n_block_size
+    n_percent = min(100, n_downloaded * 100 // n_total_size) if n_total_size else 0
+
+    if n_percent - self.n_last_percent > 1:
+      self.n_last_percent = n_percent
+      print(".", end='', flush=True)
 
 def handle_download(step_ctx: StepContext):
   exec_ctx = step_ctx.configuration()
@@ -54,7 +67,8 @@ def handle_download(step_ctx: StepContext):
     if exec_ctx.is_dry():
       print(f"[DOWNLOAD] Would download {url} to {dest_path}")
     else:
-      print(f"[DOWNLOAD] Downloading {url} to {dest_path}")
+      print(f"[DOWNLOAD] Downloading ", end='', flush=True)
       os.makedirs(os.path.dirname(dest_path), exist_ok=True)
-      urllib.request.urlretrieve(url, dest_path)
+      urllib.request.urlretrieve(url, dest_path, reporthook=DownloadDotProgress())
+      print(f" done")
   print(f"[DOWNLOAD] Finished")
