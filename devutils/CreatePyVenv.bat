@@ -31,7 +31,7 @@ SET PENVSTP_PYTHON=%PENVSTP_VENV_PATH%\scripts\python.exe
 goto end
 
 :usage
-echo ^> Usage: %THIS% ^<SOURCE_PYTHON^> ^<DESTIANTION_VENV_FOLDER_PATH^>
+echo ^> Usage: %THIS% [SOURCE_PYTHON [DESTIANTION_VENV_FOLDER_PATH]]
 echo ^> Example: %THIS% python.exe .\Tools\penvstpPyVenv
 goto :eof
 
