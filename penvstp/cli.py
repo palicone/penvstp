@@ -1,5 +1,4 @@
 import argparse
-from penvstp.helpers import *
 from penvstp.model_types import *
 from penvstp.main import process_steps
 import platform
@@ -17,10 +16,10 @@ def detect_host_arch():
   raise RuntimeError(f"Unsupported system/machine combination: {system}/{machine}")
 
 def main():
-  default_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", ".."))
+  print(f"This __file__: {__file__}")
+  default_root = os.getcwd()
   parser = argparse.ArgumentParser(description="Environment Setup Script")
-  parser.add_argument("--host-arch", required=False, choices=[arch.value for arch in HostArch],
-                      help="Target host architecture")
+  parser.add_argument("--host-arch", required=False, choices=[arch.value for arch in HostArch], help="Target host architecture")
   parser.add_argument("--temp-folder", required=False, default=os.path.join(default_root, "temp"))
   parser.add_argument("--tools-folder", required=False, default=os.path.join(default_root, "tools"))
   parser.add_argument("--externals-folder", required=False, default=os.path.join(default_root, "externals"))

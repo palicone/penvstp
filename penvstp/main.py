@@ -9,18 +9,6 @@ import os
 import platform
 from pathlib import Path
 
-def detect_host_arch():
-  system = platform.system()
-  machine = platform.machine()
-  if system == "Windows" and machine.endswith("64"):
-    return HostArch.WindowsX64
-  elif system == "Linux":
-    if machine in ["x86_64"]:
-      return HostArch.LinuxX64
-    elif machine in ["aarch64"]:
-      return HostArch.LinuxAArch64
-  raise RuntimeError(f"Unsupported system/machine combination: {system}/{machine}")
-
 def process_steps(context: ExecutionContext):
   print(f"Running in: {os.getcwd()}")
   print(f"host_arch: {context.host_arch}")
