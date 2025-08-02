@@ -16,6 +16,10 @@ jobs:
     - name: Checkout this repo
       uses: actions/checkout@v4
 
+    - name: Install dependencies
+      run: |
+        pip install pydantic
+
     - name: Run directly
       run: |
         python -m penvstp.cli --run-mode=dry_staledst ./demo/example_env_setup_actions.json
