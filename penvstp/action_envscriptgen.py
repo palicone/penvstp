@@ -26,9 +26,9 @@ def handle_env_script(step_ctx: StepContext):
       raise RuntimeError(f"[GENENVSCRIPT] Reference step '{ref_id}' has no destination folder")
 
     if exec_ctx.host_arch == HostArch.WindowsX64:
-      lines.append(f"set {v["name"]}={var_val}")
+      lines.append(f"set {v['name']}={var_val}")
     else:
-      lines.append(f"export {v["name"]}={var_val}")
+      lines.append(f"export {v['name']}={var_val}")
 
   ext = ".sh"
   if exec_ctx.host_arch == HostArch.WindowsX64:
