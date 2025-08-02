@@ -1,0 +1,14 @@
+on: [push]
+jobs:
+  xDemoRun:
+    name: Run on Linux
+    runs-on: ubuntu-latest
+    steps:
+    - name: Say hello
+      run: |
+        echo "Hello"
+        lsb_release -a
+        cat /etc/os-release
+        hostnamectl
+        python --version
+        pip list
