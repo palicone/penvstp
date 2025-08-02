@@ -63,7 +63,7 @@ def handle_pull(step_ctx: StepContext):
         print(f"[PULL] Would pull {repo_url} to {dest_path}")
       else:
         print(f"[PULL] Performing git pull {repo_url} to {dest_path}")
-        pull_repo(repo_url, dest_path, None)
+        pull_repo(dest_path, None)
     else:
       print(f"[PULL] Local version up to date")
   else:

@@ -1,5 +1,7 @@
 import os
 import subprocess
+import urllib.error
+import urllib.request
 
 def get_filename_without_extension(path):
   filename = os.path.basename(path)
@@ -10,18 +12,34 @@ def get_filename_without_extension(path):
   # Fall back to simple extension
   return os.path.splitext(filename)[0]
 
-def is_https_resource_available(str_url: str) -> bool:
+def url_exists_urllib(s_url: str) -> bool:
+  o_request = urllib.request.Request(s_url, method='HEAD')
   try:
-    subprocess.check_call([
-      "curl",
-      "-s",  # silent
-      "-I",  # headers only
-      "--fail",  # fail on 404 or other errors
-      str_url
-    ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-    return True
-  except subprocess.CalledProcessError:
+    with urllib.request.urlopen(o_request) as o_response:
+      if o_response.status != 200:
+        return False
+  except urllib.error.HTTPError as o_err:
     return False
+  except urllib.error.URLError as o_err:
+    return False
+  return True
+
+
+#def url_exists_curl(str_url: str) -> bool:
+#  try:
+#    subprocess.check_call([
+#      "curl",
+#      "-s",  # silent
+#      "-I",  # headers only
+#      "--fail",  # fail on 404 or other errors
+#      str_url
+#    ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+#    return True
+#  except subprocess.CalledProcessError:
+#    return False
+
+def is_https_resource_available(str_url: str) -> bool:
+  return url_exists_urllib(str_url)
 
 def is_local_git_repo(dest_folder) -> bool:
   if not os.path.exists(dest_folder):
@@ -35,7 +53,7 @@ def clone_repo(repo_url, dest_folder, branch):
   clone_cmd += [repo_url, dest_folder]
   subprocess.check_call(clone_cmd)
 
-def pull_repo(repo_url, dest_folder, branch):
+def pull_repo(dest_folder, branch):
   pull_cmd = ["git", "-C", dest_folder, "pull"]
   if branch:
     pull_cmd += [branch]
