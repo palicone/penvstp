@@ -1,9 +1,9 @@
 @ECHO OFF
 set THIS=%~0
 
+set THIS_FOLDER=%~dp0
 set SRC_PYTHON=%THIS_FOLDER%..\..\Tools\Python\python.exe
 set PENVSTP_VENV_PATH=%THIS_FOLDER%..\..\Tools\penvstpPyVenv
-set THIS_FOLDER=%~dp0
 
 IF [%1] EQU [] (
   echo Source Python not provided
