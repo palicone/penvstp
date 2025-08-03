@@ -74,10 +74,10 @@ class SetupConfig(BaseModel):
 class ExecutionContext:
   def __init__(self, host_arch: HostArch, actions_path: str, temp_folder: str, tools_folder: str, externals_folder: str, run_mode: RunMode, dry_mode: DryMode):
     self.host_arch = host_arch
-    self.actions_path = actions_path
-    self.temp_folder = temp_folder
-    self.tools_folder = tools_folder
-    self.externals_folder = externals_folder
+    self.actions_path = os.path.abspath(actions_path)
+    self.temp_folder = os.path.abspath(temp_folder)
+    self.tools_folder = os.path.abspath(tools_folder)
+    self.externals_folder = os.path.abspath(externals_folder)
     self.run_mode = run_mode
     self.dry_mode = dry_mode
 
