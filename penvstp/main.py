@@ -15,7 +15,7 @@ def process_steps(context: ExecutionContext):
   print(f"temp_folder: {context.temp_folder}")
   print(f"tools_folder: {context.tools_folder}")
   print(f"externals_folder: {context.externals_folder}")
-  print(f"run_type: {context.run_type}")
+  print(f"run_mode: {context.run_mode}")
   print(f"dry_mode: {context.dry_mode}")
 
   s_json = Path(context.actions_path).read_text(encoding='utf-8')

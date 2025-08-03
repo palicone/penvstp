@@ -16,7 +16,7 @@ class HostArch(str, Enum):
   LinuxX64 = "LinuxX64"
   LinuxAArch64 = "LinuxAArch64"
 
-class RunType(str, Enum):
+class RunMode(str, Enum):
   DEFAULT = "default"
   '''
   Refresh if needed
@@ -37,7 +37,7 @@ class RunType(str, Enum):
 class DryMode(str, Enum):
   DEFAULT = "default"
   '''
-  Perform actions as needed and requested by RunType
+  Perform actions as needed and requested by RunMode
   '''
   NOSRC = "nosrc"
   '''
@@ -72,32 +72,32 @@ class SetupConfig(BaseModel):
   steps: List[SetupStep]
 
 class ExecutionContext:
-  def __init__(self, host_arch: HostArch, actions_path: str, temp_folder: str, tools_folder: str, externals_folder: str, run_type: RunType, dry_mode: DryMode):
+  def __init__(self, host_arch: HostArch, actions_path: str, temp_folder: str, tools_folder: str, externals_folder: str, run_mode: RunMode, dry_mode: DryMode):
     self.host_arch = host_arch
     self.actions_path = actions_path
     self.temp_folder = temp_folder
     self.tools_folder = tools_folder
     self.externals_folder = externals_folder
-    self.run_type = run_type
+    self.run_mode = run_mode
     self.dry_mode = dry_mode
 
-  def is_run_type(self, run_type: RunType)->bool:
-    return self.run_type == run_type
+  def is_run_mode(self, run_mode: RunMode)->bool:
+    return self.run_mode == run_mode
 
   def is_check_only(self)->bool:
-    if self.is_run_type(RunType.CHECKSRC):
+    if self.is_run_mode(RunMode.CHECKSRC):
       return True
-    if self.is_run_type(RunType.CHECK):
+    if self.is_run_mode(RunMode.CHECK):
       return True
     return False
 
   def is_want_dst(self)->bool:
-    if self.is_run_type(RunType.CHECKSRC):
+    if self.is_run_mode(RunMode.CHECKSRC):
       return False
     return False
 
   def is_force(self)->bool:
-    return self.is_run_type(RunType.FORCE)
+    return self.is_run_mode(RunMode.FORCE)
 
   def is_dry(self)->bool:
     return self.dry_mode != DryMode.DEFAULT
