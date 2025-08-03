@@ -110,7 +110,7 @@ class ExecutionContext:
 
   def is_dry_stale(self)->bool:
     if self.is_dry_dest():
-      return self.dry_mode != DryMode.STALEDST
+      return self.dry_mode == DryMode.STALEDST
     return False
 
 class StepContext:
