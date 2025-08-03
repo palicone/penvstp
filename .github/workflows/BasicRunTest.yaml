@@ -22,7 +22,7 @@ jobs:
 
     - name: Run directly
       run: |
-        python -m penvstp.cli --run-mode=dry_staledst ./demo/example_env_setup_actions.json
+        python -m penvstp.cli --dry-mode=staledst ./demo/example_env_setup_actions.json
 
     - name: Install as package
       run: |
@@ -31,5 +31,5 @@ jobs:
 
     - name: Run as package
       run: |
-        penvstp --run-mode=dry_staledst ./demo/example_env_setup_actions.json
+        penvstp --dry-mode=staledst ./demo/example_env_setup_actions.json
         

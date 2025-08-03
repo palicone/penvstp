@@ -34,21 +34,21 @@ class RunType(str, Enum):
   Perform all actions even if resources are in place
   '''
 
-class RunMode(str, Enum):
+class DryMode(str, Enum):
   DEFAULT = "default"
   '''
   Perform actions as needed and requested by RunType
   '''
-  DRY_NOSRC = "dry_nosrc"
+  NOSRC = "nosrc"
   '''
   Assume action source is missing
   '''
-  DRY_NODST = "dry_nodst"
+  NODST = "nodst"
   '''
   Assume action source is available
   Assume action destination doesn't exist
   '''
-  DRY_STALEDST = "dry_staledst"
+  STALEDST = "staledst"
   '''
   Assume action source is available
   Assume action destination is not up to date
@@ -72,14 +72,14 @@ class SetupConfig(BaseModel):
   steps: List[SetupStep]
 
 class ExecutionContext:
-  def __init__(self, host_arch: HostArch, actions_path: str, temp_folder: str, tools_folder: str, externals_folder: str, run_type: RunType, run_mode: RunMode):
+  def __init__(self, host_arch: HostArch, actions_path: str, temp_folder: str, tools_folder: str, externals_folder: str, run_type: RunType, dry_mode: DryMode):
     self.host_arch = host_arch
     self.actions_path = actions_path
     self.temp_folder = temp_folder
     self.tools_folder = tools_folder
     self.externals_folder = externals_folder
     self.run_type = run_type
-    self.run_mode = run_mode
+    self.dry_mode = dry_mode
 
   def is_run_type(self, run_type: RunType)->bool:
     return self.run_type == run_type
@@ -100,17 +100,17 @@ class ExecutionContext:
     return self.is_run_type(RunType.FORCE)
 
   def is_dry(self)->bool:
-    return self.run_mode != RunMode.DEFAULT
+    return self.dry_mode != DryMode.DEFAULT
 
   def is_dry_src(self)->bool:
-    return self.run_mode != RunMode.DRY_NOSRC
+    return self.dry_mode != DryMode.NOSRC
 
   def is_dry_dest(self)->bool:
-    return self.run_mode != RunMode.DRY_NODST
+    return self.dry_mode != DryMode.NODST
 
   def is_dry_stale(self)->bool:
     if self.is_dry_dest():
-      return self.run_mode != RunMode.DRY_STALEDST
+      return self.dry_mode != DryMode.STALEDST
     return False
 
 class StepContext:
