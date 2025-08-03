@@ -2,7 +2,7 @@
 set THIS=%~0
 set THIS_FOLDER=%~dp0
 
-set PENVSTP_VENV_PATH=%THIS_FOLDER%..\..\Tools\penvstpPyVenv
+set PENVSTP_VENV_PATH=%THIS_FOLDER%..\..\tools\penvstpPyVenv
 
 IF [%1] EQU [] (
   echo VENV destination not provided
@@ -21,7 +21,7 @@ goto end
 
 :usage
 echo ^> Usage: %THIS% [DESTIANTION_VENV_FOLDER_PATH]
-echo ^> Example: %THIS% .\Tools\penvstpPyVenv
+echo ^> Example: %THIS% .\tools\penvstpPyVenv
 goto :eof
 
 :end

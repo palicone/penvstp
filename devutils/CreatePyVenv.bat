@@ -5,8 +5,8 @@ set THIS_FOLDER=%~dp0
 set SRC_PYTHON
 set PENVSTP_VENV_PATH
 
-for %%I in ("%THIS_FOLDER%..\..\Tools\Python\python.exe") do set "SRC_PYTHON=%%~fI"
-for %%I in ("%THIS_FOLDER%..\..\Tools\penvstpPyVenv") do set "PENVSTP_VENV_PATH=%%~fI"
+for %%I in ("%THIS_FOLDER%..\..\tools\Python\python.exe") do set "SRC_PYTHON=%%~fI"
+for %%I in ("%THIS_FOLDER%..\..\tools\penvstpPyVenv") do set "PENVSTP_VENV_PATH=%%~fI"
 
 
 IF [%1] EQU [] (
@@ -36,7 +36,7 @@ goto end
 
 :usage
 echo ^> Usage: %THIS_PATH% [SOURCE_PYTHON [DESTIANTION_VENV_FOLDER_PATH]]
-echo ^> Example: %THIS_PATH% python.exe .\Tools\penvstpPyVenv
+echo ^> Example: %THIS_PATH% python.exe .\tools\penvstpPyVenv
 goto :eof
 
 :end
