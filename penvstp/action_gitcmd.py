@@ -16,11 +16,12 @@ def handle_gitcmd(step_ctx: StepContext):
   if not source_path:
     raise ValueError(f"[GITCMD] Referenced step destination path undetermined")
 
-  full_cmd = ["git", "-C", source_path] + step.params.cmd.split()
-  if exec_ctx.is_dry():
-    print(f"[GITCMD] Would execute: {' '.join(full_cmd)}")
-  else:
-    print(f"[GITCMD] Running: {' '.join(full_cmd)}")
-    subprocess.check_call(full_cmd)
+  if exec_ctx.is_want_dst():
+    full_cmd = ["git", "-C", source_path] + step.params.cmd.split()
+    if exec_ctx.is_dry():
+      print(f"[GITCMD] Would execute: {' '.join(full_cmd)}")
+    else:
+      print(f"[GITCMD] Running: {' '.join(full_cmd)}")
+      subprocess.check_call(full_cmd)
 
   print(f"[GITCMD] Finished")

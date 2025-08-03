@@ -44,31 +44,33 @@ def handle_download(step_ctx: StepContext):
   if not web_resource_exists:
     raise RuntimeError(f"[DOWNLOAD] Not reachable: {url}")
 
-  destination_exists = False
+  if exec_ctx.is_want_dst():
+    destination_exists = False
 
-  if exec_ctx.is_dry():
-    if exec_ctx.is_dry_dest():
-      print(f"[DOWNLOAD] Assuming {dest_path} exists")
-      destination_exists = True
-    else:
-      print(f"[DOWNLOAD] Assuming {dest_path} doesn't exists")
-      destination_exists = False
-  else:
-    destination_exists = os.path.exists(dest_path)
-
-  if destination_exists:
-    print(f"[DOWNLOAD] File {dest_path} already exists")
-  else:
-    if exec_ctx.is_check_only():
-      raise RuntimeError(f"[DOWNLOAD] File {dest_path} does not exist")
-
-  must_download = exec_ctx.is_force() or not destination_exists
-  if must_download:
     if exec_ctx.is_dry():
-      print(f"[DOWNLOAD] Would download {url} to {dest_path}")
+      if exec_ctx.is_dry_dest():
+        print(f"[DOWNLOAD] Assuming {dest_path} exists")
+        destination_exists = True
+      else:
+        print(f"[DOWNLOAD] Assuming {dest_path} doesn't exists")
+        destination_exists = False
     else:
-      print(f"[DOWNLOAD] Downloading ", end='', flush=True)
-      os.makedirs(os.path.dirname(dest_path), exist_ok=True)
-      urllib.request.urlretrieve(url, dest_path, reporthook=DownloadDotProgress())
-      print(f" done")
+      destination_exists = os.path.exists(dest_path)
+
+    if destination_exists:
+      print(f"[DOWNLOAD] File {dest_path} already exists")
+    else:
+      if exec_ctx.is_check_only():
+        raise RuntimeError(f"[DOWNLOAD] File {dest_path} does not exist")
+
+    must_download = exec_ctx.is_force() or not destination_exists
+    if must_download:
+      if exec_ctx.is_dry():
+        print(f"[DOWNLOAD] Would download {url} to {dest_path}")
+      else:
+        print(f"[DOWNLOAD] Downloading ", end='', flush=True)
+        os.makedirs(os.path.dirname(dest_path), exist_ok=True)
+        urllib.request.urlretrieve(url, dest_path, reporthook=DownloadDotProgress())
+        print(f" done")
+
   print(f"[DOWNLOAD] Finished")

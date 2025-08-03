@@ -23,7 +23,7 @@ def main():
   parser.add_argument("--temp-folder", required=False, default=os.path.join(default_root, "temp"))
   parser.add_argument("--tools-folder", required=False, default=os.path.join(default_root, "tools"))
   parser.add_argument("--externals-folder", required=False, default=os.path.join(default_root, "externals"))
-  parser.add_argument("--run-type", required=False, default="default", choices=[t.value for t in RunType], help="Run type: default, check, force")
+  parser.add_argument("--run-type", required=False, default="default", choices=[t.value for t in RunType], help="Run type: default, checksrc, check, force")
   parser.add_argument("--run-mode", required=False, default="default", choices=[t.value for t in RunMode], help="Run mode: default, dry_nosrc, dry_nodst, dry_staledst")
   parser.add_argument('input_file', type=str, help='Path to the input file to process')
   args = parser.parse_args()

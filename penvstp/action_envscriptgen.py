@@ -35,29 +35,31 @@ def handle_env_script(step_ctx: StepContext):
     ext = ".bat"
 
   output_path = step.params.output_name + ext
-  destination_exists = False
-  if exec_ctx.is_dry():
-    if exec_ctx.is_dry_dest():
-      print(f"[GENENVSCRIPT] Assuming output path {output_path} exists")
-      destination_exists = True
-    else:
-      print(f"[GENENVSCRIPT] Assuming output path {output_path} does not exist")
-      destination_exists = False
-  else:
-    destination_exists = os.path.exists(output_path)
-
-  if destination_exists:
-    print(f"[GENENVSCRIPT] Output file {output_path} already exists")
-  else:
-    if exec_ctx.is_check_only():
-      raise RuntimeError(f"[GENENVSCRIPT] Output file {output_path} does not exist")
-
-  create_script = exec_ctx.is_force() or not destination_exists
-  if create_script:
+  if exec_ctx.is_want_dst():
+    destination_exists = False
     if exec_ctx.is_dry():
-      print(f"[GENENVSCRIPT] Would create environment script at {output_path} with lines: {lines}")
+      if exec_ctx.is_dry_dest():
+        print(f"[GENENVSCRIPT] Assuming output path {output_path} exists")
+        destination_exists = True
+      else:
+        print(f"[GENENVSCRIPT] Assuming output path {output_path} does not exist")
+        destination_exists = False
     else:
-      print(f"[GENENVSCRIPT] Creating environment script at {output_path} with lines: {lines}")
-      with open(output_path, 'w') as f:
-        f.write('\n'.join(lines))
+      destination_exists = os.path.exists(output_path)
+
+    if destination_exists:
+      print(f"[GENENVSCRIPT] Output file {output_path} already exists")
+    else:
+      if exec_ctx.is_check_only():
+        raise RuntimeError(f"[GENENVSCRIPT] Output file {output_path} does not exist")
+
+    create_script = exec_ctx.is_force() or not destination_exists
+    if create_script:
+      if exec_ctx.is_dry():
+        print(f"[GENENVSCRIPT] Would create environment script at {output_path} with lines: {lines}")
+      else:
+        print(f"[GENENVSCRIPT] Creating environment script at {output_path} with lines: {lines}")
+        with open(output_path, 'w') as f:
+          f.write('\n'.join(lines))
+
   print(f"[GENENVSCRIPT] Finished")

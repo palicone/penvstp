@@ -21,9 +21,13 @@ class RunType(str, Enum):
   '''
   Refresh if needed
   '''
+  CHECKSRC = "checksrc"
+  '''
+  Only check if source resources are available
+  '''
   CHECK = "check"
   '''
-  Only check if resources are in place
+  Check if resources are available and in place
   '''
   FORCE = "force"
   '''
@@ -81,7 +85,16 @@ class ExecutionContext:
     return self.run_type == run_type
 
   def is_check_only(self)->bool:
-    return self.is_run_type(RunType.CHECK)
+    if self.is_run_type(RunType.CHECKSRC):
+      return True
+    if self.is_run_type(RunType.CHECK):
+      return True
+    return False
+
+  def is_want_dst(self)->bool:
+    if self.is_run_type(RunType.CHECKSRC):
+      return False
+    return False
 
   def is_force(self)->bool:
     return self.is_run_type(RunType.FORCE)
