@@ -1,9 +1,13 @@
 @ECHO OFF
-set THIS=%~0
+set THIS_PATH=%~0
 
 set THIS_FOLDER=%~dp0
-set SRC_PYTHON=%THIS_FOLDER%..\..\Tools\Python\python.exe
-set PENVSTP_VENV_PATH=%THIS_FOLDER%..\..\Tools\penvstpPyVenv
+set SRC_PYTHON
+set PENVSTP_VENV_PATH
+
+for %%I in ("%THIS_FOLDER%..\..\Tools\Python\python.exe") do set "SRC_PYTHON=%%~fI"
+for %%I in ("%THIS_FOLDER%..\..\Tools\penvstpPyVenv") do set "PENVSTP_VENV_PATH=%%~fI"
+
 
 IF [%1] EQU [] (
   echo Source Python not provided
@@ -31,8 +35,8 @@ SET PENVSTP_PYTHON=%PENVSTP_VENV_PATH%\scripts\python.exe
 goto end
 
 :usage
-echo ^> Usage: %THIS% [SOURCE_PYTHON [DESTIANTION_VENV_FOLDER_PATH]]
-echo ^> Example: %THIS% python.exe .\Tools\penvstpPyVenv
+echo ^> Usage: %THIS_PATH% [SOURCE_PYTHON [DESTIANTION_VENV_FOLDER_PATH]]
+echo ^> Example: %THIS_PATH% python.exe .\Tools\penvstpPyVenv
 goto :eof
 
 :end
