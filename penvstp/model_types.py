@@ -94,7 +94,7 @@ class ExecutionContext:
   def is_want_dst(self)->bool:
     if self.is_run_mode(RunMode.CHECKSRC):
       return False
-    return False
+    return True
 
   def is_force(self)->bool:
     return self.is_run_mode(RunMode.FORCE)

@@ -9,6 +9,10 @@ def handle_env_script(step_ctx: StepContext):
     raise ValueError("[GENENVSCRIPT] Missing 'env_vars' or 'output_name' for generate_env_script action")
 
   lines = []
+  if exec_ctx.host_arch == HostArch.WindowsX64:
+    lines.append(f"@echo off")
+  else:
+    pass
   for v in step.params.env_vars:
     if not isinstance(v, dict):
       raise ValueError("[GENENVSCRIPT] env_vars must be a dictionary with 'name' and 'reference_id' keys")
@@ -34,7 +38,7 @@ def handle_env_script(step_ctx: StepContext):
   if exec_ctx.host_arch == HostArch.WindowsX64:
     ext = ".bat"
 
-  output_path = step.params.output_name + ext
+  output_path = os.path.abspath(step.params.output_name + ext)
   if exec_ctx.is_want_dst():
     destination_exists = False
     if exec_ctx.is_dry():
