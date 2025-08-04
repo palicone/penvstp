@@ -1,4 +1,5 @@
 from penvstp.model_types import StepContext
+from penvstp.helpers import flatten_if_single_subfolder
 import os
 import zipfile
 import tarfile
@@ -57,14 +58,20 @@ def handle_extract(step_ctx: StepContext):
       if not source_exists:
         raise RuntimeError(f"[EXTRACT] Source file does not exist: {source_path}")
       if exec_ctx.is_dry():
-        print(f"[EXTRACT] Would extract {source_path} to {destination_folder}")
+        print(f"[EXTRACT] Would extract...")
       else:
-        print(f"[EXTRACT] Extracting {source_path} to {destination_folder}")
+        print(f"[EXTRACT] Extracting...")
         if source_path.endswith(".zip"):
           with zipfile.ZipFile(source_path, 'r') as zip_ref:
             zip_ref.extractall(destination_folder)
         elif source_path.endswith(".tar.xz"):
           with tarfile.open(source_path, 'r:xz') as tar_ref:
             tar_ref.extractall(destination_folder)
+        elif source_path.endswith(".tar.gz") or source_path.endswith(".tgz"):
+          with tarfile.open(source_path, 'r:gz') as tar_ref:
+            tar_ref.extractall(destination_folder)
+        else:
+          raise RuntimeError("[EXTRACT] Unsupported or unrecognized archive format")
+        flatten_if_single_subfolder(destination_folder)
 
   print(f"[EXTRACT] Finished")

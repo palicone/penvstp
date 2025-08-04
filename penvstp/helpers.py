@@ -71,3 +71,19 @@ def local_and_remote_repo_version_match(repo_url, dest_folder) -> bool:
     return True
   return False
 
+def flatten_if_single_subfolder(str_destination_folder):
+  if not os.path.isdir(str_destination_folder):
+    return
+
+  entries = os.listdir(str_destination_folder)
+  if len(entries) != 1:
+    return
+
+  str_inner_path = os.path.join(str_destination_folder, entries[0])
+  if not os.path.isdir(str_inner_path):
+    return
+
+  str_temp_name = str_destination_folder + "_tmp_"
+  os.rename(str_destination_folder, str_temp_name)
+  os.rename(os.path.join(str_temp_name, entries[0]), str_destination_folder)
+  os.rmdir(str_temp_name)
