@@ -166,6 +166,7 @@ class StepContext:
   def get_destination_folder(self) -> Optional[str]:
     if self.get_action() == StepAction.PULL:
       filename = os.path.basename(self.step().params.url)
+      filename = get_filename_without_extension(filename)
       return os.path.join(self.configuration().externals_folder, filename)
     elif self.get_action() == StepAction.GITCMD:
       pass
